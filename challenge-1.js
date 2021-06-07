@@ -12,7 +12,7 @@
     let days =['Saturday','Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']
     for (let i = 0; i < arr.length; i++) {
         for (let index = i+1; index < arr.length; index++) {
-            if(arr[index] - arr[i] > max - min){
+            if(arr[index] - arr[i] > arr[max] - arr[min]){
                 min = i
                 max = index
             } 
@@ -36,7 +36,8 @@ function CheckOverlap(t1Start, t1End, t2Start, t2End) {
     return  t2Start > t1End || t1Start >  t2End ? 'no overlap' :'overlap'
 }
 console.log(
-  CheckOverlap("18/4/2021 14:00","22/4/2021 15:00" ,"14/5/2021 12:00","14/5/2021 13:00")
+    CheckOverlap("13/5/2021 13:00","14/5/2021 13:00", "15/5/2021 13:00","16/5/2021 13:00" ),' -- ',
+    CheckOverlap("13/5/2021 13:00","14/5/2021 13:00", "14/5/2021 13:00","16/5/2021 13:00")
 );
 
 /** Q3
@@ -58,12 +59,12 @@ function HowManyPairs(shoes) {
     }; 
     let flag=shoes[0];
     for (let i = 0; i < shoes.length; i++) { 
-        if(shoes[i] == flag && letter['R'].length > 0 && letter['L'].length > 0) 
+        if(shoes[i] == flag && letter['R'].length && letter['L'].length) 
         {
             letter[flag]=[]
-            flag = flag == 'R' ? 'L' : 'R'
-        }
-        shoes[i] == 'R' ? letter['R'].push('R') : letter['L'].push('L') 
+            flag = shoes[i-1]
+        } 
+        letter[shoes[i]].push(shoes[i])
         if(shoes[i] != flag && letter['L'].length == letter['R'].length ){    
             count+=letter[shoes[i]].length
             letter['R']=[]
@@ -97,8 +98,7 @@ console.log(HowManyLetters("abcac"));
 function BinarySearch(element, arr) {   
     /*arr.sort(function(a, b) {
         return a - b;
-    })*/
-    console.log(arr);
+    })*/ 
     let end=arr.length -1
     let start=0
     let index
@@ -120,7 +120,7 @@ function BinarySearch(element, arr) {
 
 console.log(BinarySearch(9, [4, 2, 5, 2, 1, 4, 6, 7, 9]));
 console.log(BinarySearch(1, [4, 2, 5, 2, 1, 5, 6, 1, 9]));
-console.log(BinarySearch(2, [4, 2, 5, 2, 1, 5, 6, 1]));
+console.log(BinarySearch(2, [1,2,3,4,5,6,7,8,9]));
 
 /** Q6
   * Create a function that takes an array of integers as an argument and returns the same array in ascending order. Using sort() would be easy, but for this challenge YOU have to sort the array creating your own algorithm.
@@ -138,7 +138,7 @@ console.log(BinarySearch(2, [4, 2, 5, 2, 1, 5, 6, 1]));
  This is a challenge to enhance your ability, using the sort built-in won't enhance your skills.
   */
 function sortArray(arr){
-    for (let i = 0; i < arr.length; i++) {
+    /*for (let i = 0; i < arr.length; i++) {
         for (let j = 0; j < arr.length; j++) {
             if(arr[j] > arr[j+1]){
                 temp =arr[j+1]
@@ -146,10 +146,14 @@ function sortArray(arr){
                 arr[j] =temp
             }
         }
-    }
+    }*/
+    let pos={}
+    let neg={}
+    arr.map(e=> e < 0 ? neg[-1*e]=1 : pos[e]=1 )
+    arr=[ ...Object.keys(neg).map(e=> e*-1).reverse(),  ...Object.keys(pos)].map(e => Number(e))
     return arr
 } 
-console.log(sortArray([23, 15, 34, 17, -28]))
+console.log(sortArray([23, 15, 34, 17,-99,-60,-20,-33,0,-88,-10,9,8,7,6,5,4,3,2,1]))
 /** Q7
   * Create a function that takes an array of numbers and return both the minimum and maximum numbers, in that order.
  
@@ -164,8 +168,8 @@ function minMax(arr){
     let min=0;
     let max=0;
     arr.forEach((element,index) => {
-        arr[min] > element ? min =index :min
-        arr[max] < element ? max =index :max 
+        arr[min] > element ? min =index :''
+        arr[max] < element ? max =index :'' 
     });
    return [arr[min],arr[max]]
 }
@@ -271,7 +275,7 @@ console.log(numToEng(126))
  Notes
  The function receives an integer and must return an integer.
   */
- function squareDigits(number){ 
+ function squareDigits(number){  
     return  Number((''+number).toString().split('').map(e =>  e*e).join('')) 
  }
  console.log(squareDigits(3212))
@@ -328,12 +332,12 @@ console.log(concat([1, 2], [3, 4]))
  Notice that num is also included in the returned array.
   */
 function arrayOfMultiples(num, length) {
-   let arr=[]
-   for (var i = 0; i <length;i++)
-   {
-       arr[i]=num*(i+1)
-   }
-   return arr
+    let arr=[]
+    for (var i = 0; i <length;i++)
+    {
+        arr[i]=num*(i+1)
+    }
+    return arr
 }
 console.log(arrayOfMultiples(7, 5))
 /** Q14
@@ -394,7 +398,7 @@ function  testJackpot(arr) {
     }
     return true;
 }
-console.log( testJackpot(["@", "@", "@", "@"]))
+console.log( testJackpot(["@", "@", "@", "@","@"]))
 /** Q16
   * Create a function that takes an array of numbers and returns the second largest number.
  
@@ -444,7 +448,7 @@ function numberSplit(num) {
         return num % 2 === 0 ? [num/2, num/2] :  [Math.floor(num/2), Math.ceil(num/2)]
     }
 }
-console.log(numberSplit(5));
+console.log(numberSplit(-7));
 /** Q18
   * Create a function that takes an array of strings and return an array, sorted from shortest to longest.
  
@@ -461,7 +465,7 @@ console.log(numberSplit(5));
  All test cases contain arrays with strings of different lengths, so you won't have to deal with multiple strings of the same length.
   */
 function sortByLength(arr) {
-    let temp
+    let temp 
     for (let index = 0; index < arr.length; index++) {
         for (let index2 = index + 1; index2 < arr.length; index2++) {
             if (arr[index].length > arr[index2].length) {
@@ -496,7 +500,7 @@ function findLargestNums(arr) {
     })
     return max
 }
-console.log(findLargestNums([[-34, -54, -74], [-32, -2, -65], [-54, 7, -43]]))
+console.log(findLargestNums([[0.4321, 0.7634, 0.652], [1.324, 9.32, 2.5423, 6.4314], [9, 3, 6, 3]]))
 /** Q20
   * A set is a collection of unique items. A set can be formed from an array from removing all duplicate items.
  
@@ -516,11 +520,14 @@ console.log(findLargestNums([[-34, -54, -74], [-32, -2, -65], [-54, 7, -43]]))
  
  set([3, 3, 3, 2, 1]) ➞ [1, 2, 3]
  Notes
- For this question, output an array, not a set. These are two distinctly different data structures in JavaScript (although they can be converted from one to the other).
+ For this question, output an array, not a set.
+  These are two distinctly different data structures in JavaScript (although they can be converted from one to the other).
  See resources for a hint if you get stuck.
   */
 
- function set(arr) {
-    return [...new Set(arr)] 
+ function set(arr) {  
+    return [...new Set(arr)].sort(function(a, b) {
+        return a - b;
+    })
  }
- console.log(set([4, 4, 4, 4]))
+ console.log(set([66,22.5,3,7,9,1]))
